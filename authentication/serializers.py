@@ -2,11 +2,11 @@ from rest_framework import serializers
 
 from .models import User, Administrator, Teacher, Student
 
-# class UserSerializer(serializers.ModelSerializer):
+class UserSerializer(serializers.ModelSerializer):
     
-#     class Meta:
-#         model = User
-#         fields = ('id', 'username', 'first_name', 'last_name', 'email', 'password', 'user_type')
+    class Meta:
+        model = User
+        fields = ('id', 'username', 'first_name', 'last_name', 'email', 'password', 'user_type')
 
 
 class AdministratorSerializer(serializers.ModelSerializer):

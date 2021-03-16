@@ -90,13 +90,7 @@ DATABASES = {
 }
 
 SIMPLE_JWT = {
-    'REFRESH_TOKEN_LIFETIME': timedelta(days=15),
-    'ROTATE_REFRESH_TOKENS': True,
-    # how long the original token is valid for
-    'JWT_EXPIRATION_DELTA': timedelta(days=10),
-
-    # allow refreshing of tokens
-    'JWT_ALLOW_REFRESH': True
+    'ACCESS_TOKEN_LIFETIME': timedelta(minutes=120)
 }
 
 
@@ -138,7 +132,7 @@ USE_L10N = True
 
 USE_TZ = True
 
-AUTH_USER_MODEL = "users.User"
+AUTH_USER_MODEL = "authentication.User"
 
 
 # Static files (CSS, JavaScript, Images)
