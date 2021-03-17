@@ -6,7 +6,7 @@ from rest_framework_simplejwt.views import (
     TokenRefreshView,
 )
 
-from authentication.views import register_admin, delete_admin, get_admin, login_user
+from authentication.views import register_admin, delete_admin, get_admin, login_user, ChangePasswordView
 
 app_name="api"
 
@@ -17,4 +17,5 @@ urlpatterns = [
     url(r'^login/', login_user),
     url(r'^token/', TokenObtainPairView.as_view(), name='token_obtain_pair'),
     url(r'^token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
+    url(r'^change-password/', ChangePasswordView.as_view(), name='change-password'),
 ]
