@@ -46,8 +46,8 @@ def register_admin(request):
 @permission_classes([AdministratorPermission])
 def delete_admin(request):
     try:
-        print(User.objects.get(username="admin"))
-        user = User.objects.get(username="admin")
+        print(User.objects.get(username=request.data.get('username')))
+        user = User.objects.get(username=request.data.get('username'))
         admin = Administrator.objects.get(user=user)
         admin.delete()
         user.delete()
@@ -116,3 +116,80 @@ class ChangePasswordView(generics.UpdateAPIView):
             return Response(response)
 
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+@api_view(['POST'])
+def register_student(request):
+    serialized = UserSerializer(data = request.data)
+    if serialized.is_valid():
+        user = User.objects.create(
+            username = request.data.get('username'),
+            email = request.data.get('email'),
+            first_name = request.data.get('first_name'),
+            last_name = request.data.get('last_name'),
+            user_type = request.data.get('user_type'),
+            # password = make_password(request.data.get('password')) + "_NEW",
+        )
+        user.set_password(request.data.get('password'))
+        user.save()
+        student = Student.objects.create(user = user)
+        return Response(serialized.data, status=status.HTTP_201_CREATED)
+    else:
+        return Response(serialized._errors, status=status.HTTP_400_BAD_REQUEST)
+
+@api_view(['DELETE'])
+@permission_classes([AdministratorPermission])
+def delete_student(request):
+    try:
+        user = User.objects.get(username=request.data.get('username'))
+        student = Student.objects.get(user=user)
+        student.delete()
+        user.delete()
+    except:
+        return Response({"error": "The user does not exist"})
+    else:
+        return Response({"success": "The user was deleted"})
+
+@api_view(['GET'])
+def get_student(request):
+    user = list(User.objects.filter(user_type=3).values("username", "email", "first_name", "last_name", "user_type"))
+    student = list(Student.objects.values("user_id"))
+    return JsonResponse({"data": {"student": student, "user": user}})
+
+@api_view(['POST'])
+def register_teacher(request):
+    serialized = UserSerializer(data = request.data)
+    if serialized.is_valid():
+        user = User.objects.create(
+            username = request.data.get('username'),
+            email = request.data.get('email'),
+            first_name = request.data.get('first_name'),
+            last_name = request.data.get('last_name'),
+            user_type = request.data.get('user_type'),
+            # password = make_password(request.data.get('password')) + "_NEW",
+        )
+        user.set_password(request.data.get('password'))
+        user.save()
+        teacher = Teacher.objects.create(user = user)
+        return Response(serialized.data, status=status.HTTP_201_CREATED)
+    else:
+        return Response(serialized._errors, status=status.HTTP_400_BAD_REQUEST)
+
+@api_view(['DELETE'])
+@permission_classes([AdministratorPermission])
+def delete_teacher(request):
+    try:
+        user = User.objects.get(username=request.data.get('username'))
+        teacher = Teacher.objects.get(user=user)
+        teacher.delete()
+        user.delete()
+    except:
+        return Response({"error": "The user does not exist"})
+    else:
+        return Response({"success": "The user was deleted"})
+
+@api_view(['GET'])
+def get_teacher(request):
+    user = list(User.objects.filter(user_type=2).values("username", "email", "first_name", "last_name", "user_type"))
+    teacher = list(Teacher.objects.values("user_id"))
+    return JsonResponse({"data": {"teacher": teacher, "user": user}})
+    
