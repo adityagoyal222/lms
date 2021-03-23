@@ -15,7 +15,7 @@ class User(auth.models.AbstractUser):
         (3, 'Student'),
     )
 
-    user_type = models.PositiveIntegerField(choices=USER_TYPE_CHOICES)
+    user_type = models.PositiveIntegerField(choices=USER_TYPE_CHOICES, null=True)
 
     def __str__(self):
         return self.first_name + ' ' + self.last_name
